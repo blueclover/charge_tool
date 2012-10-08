@@ -7,10 +7,18 @@ def fill_in_valid_user_info
   fill_in "Confirm Password", with: "foobar"
 end
 
-def valid_signin(user)
+def fill_signin_fields(user)
   fill_in "Email",    with: user.email
   fill_in "Password", with: user.password
   click_button "Sign in"
+  # tutorial had following line for when not using Capybara:
+  cookies[:remember_token] = user.remember_token
+  #session[:user_id] = user.id  # <- this doesn't work
+end
+
+def sign_in(user)
+  visit signin_path
+  fill_signin_fields user
 end
 
 RSpec::Matchers.define :have_error_message do |message|
