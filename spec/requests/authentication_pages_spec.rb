@@ -11,6 +11,18 @@ describe "Authentication" do
   end
 
   describe "signin" do
+
+    shared_examples_for "profile page for signed-in users" do
+
+      it { should have_selector('title', text: user.name) }
+
+      it { should have_link('Profile', href: user_path(user)) }
+      it { should have_link('Settings', href: edit_user_path(user)) }
+      it { should have_link('Sign out', href: signout_path) }
+
+      it { should_not have_link('Sign in', href: signin_path) }
+    end
+
     before { visit signin_path }
 
     describe "with invalid information" do
@@ -25,23 +37,33 @@ describe "Authentication" do
       end
     end
 
-    describe "with valid information" do
+    describe "as non-admin" do
       let(:user) { FactoryGirl.create(:user) }
       before { sign_in(user) }
 
-      it { should have_selector('title', text: user.name) }
+      it_should_behave_like "profile page for signed-in users"
 
-      it { should have_link('Users',    href: users_path) }
-      it { should have_link('Profile', href: user_path(user)) }
-      it { should have_link('Settings', href: edit_user_path(user)) }
-      it { should have_link('Sign out', href: signout_path) }
+      it { should_not have_link('Users',    href: users_path) }
 
-      it { should_not have_link('Sign in', href: signin_path) }
+      describe "and then visiting home page" do
+        before { visit root_path }
+        it { should_not have_link('Register') }
+      end
 
       describe "followed by signout" do
         before { click_link "Sign out" }
         it { should have_link('Sign in') }
       end
+    end
+
+    describe "as admin" do
+      let(:user) { FactoryGirl.create(:admin) }
+      before { sign_in(user) }
+
+      it_should_behave_like "profile page for signed-in users"
+
+      it { should have_link('Users',    href: users_path) }
+
     end
   end
 
@@ -51,6 +73,11 @@ describe "Authentication" do
       let(:user) { FactoryGirl.create(:user) }
 
       describe "in the Users controller" do
+
+        describe "visiting the profile page" do
+          before { visit user_path(user) }
+          it { should have_selector('title', text: 'Sign in') }
+        end
 
         describe "visiting the edit page" do
           before { visit edit_user_path(user) }
@@ -109,6 +136,11 @@ describe "Authentication" do
       let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
       before { sign_in user }
 
+      describe "visiting user's profile" do
+        before { visit user_path(wrong_user) }
+        specify { current_path.should == root_path }
+      end
+
       describe "visiting Users#edit page" do
         before { visit edit_user_path(wrong_user) }
         it { should_not have_selector('title', text: full_title('Edit user')) }
@@ -125,6 +157,11 @@ describe "Authentication" do
       let(:non_admin) { FactoryGirl.create(:user) }
 
       before { sign_in non_admin }
+
+      describe "visiting the user index" do
+        before { visit users_path }
+        specify { current_path.should == root_path }
+      end
 
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
