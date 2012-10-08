@@ -24,6 +24,15 @@ describe "User Pages" do
       it { should_not have_link('delete', href: user_path(admin)) }
     end
 
+    describe "edit links" do
+      it { should have_link('edit', href: edit_user_path(User.first)) }
+
+      it "should link to the user's edit page" do
+        click_link "edit"
+        page.should have_selector 'title', text: full_title('Edit user')
+      end
+    end
+
     describe "pagination" do
 
       before(:all) { 30.times { FactoryGirl.create(:user) } }
@@ -101,7 +110,7 @@ describe "User Pages" do
     end
 
     describe "page" do
-      it { should have_selector('h1',    text: "Update your profile") }
+      it { should have_selector('h1',    text: "Update user profile") }
       it { should have_selector('title', text: "Edit user") }
     end
 
@@ -125,6 +134,27 @@ describe "User Pages" do
       it { should have_selector('title', text: new_name) }
       it { should have_success_message }
       it { should have_link('Sign out', href: signout_path) }
+      specify { user.reload.name.should  == new_name }
+      specify { user.reload.email.should == new_email }
+    end
+
+    describe "as admin" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      before do
+        sign_in admin
+        visit edit_user_path(user)
+      end
+      let(:new_name)  { "Admin's Choice" }
+      let(:new_email) { "updated@example.com" }
+      before do
+        fill_in "Name",             with: new_name
+        fill_in "Email",            with: new_email
+        fill_in "Password",         with: user.password
+        fill_in "Confirm Password", with: user.password
+        click_button "Save changes"
+      end
+
+      it { should have_success_message }
       specify { user.reload.name.should  == new_name }
       specify { user.reload.email.should == new_email }
     end
