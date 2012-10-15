@@ -1,0 +1,16 @@
+<% provide(:title, "Booking #{@booking.id}") %>
+<h1>Booking <%= @booking.id %></h1>
+<h2>Score: <%= @booking.score %></h2>
+<h1><%= @booking.bucket %></h1>
+
+<ol class="booking_details">
+<% @booking.booking_details.each do |detail| %>
+  <li>
+    Charge <%= detail.rank %>:
+    <%= detail.charge_id %>
+  </li>
+<% end %>
+</ol>
+
+<%= link_to 'Edit', edit_booking_path(@booking) %> |
+<%= link_to 'Back to Bookings', bookings_path %>

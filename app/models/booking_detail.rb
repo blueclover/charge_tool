@@ -4,7 +4,7 @@ class BookingDetail < ActiveRecord::Base
   belongs_to :charge
   delegate :score, to: :charge
 
-  validates :booking_id, presence: true
+  validates :booking_id, presence: true # this breaks the new booking form
   validates :charge_id, presence: true
   validates :rank, presence: true
 

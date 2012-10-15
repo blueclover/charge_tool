@@ -1,0 +1,29 @@
+// Place all the styles related to the surveys controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.article {
+  h2 {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 3px;
+  }
+}
+
+.booking_details {
+  list-style: none;
+  font-weight: normal;
+  margin: 20;
+  padding: 20;
+  > li {
+    margin: 5px 0;
+    padding: 20;
+  }
+}
+
+form > fieldset {
+  border: none;
+  border: solid 1px #CCC;
+  padding: 10px 15px;
+  margin: 0;
+  margin: 15px 0;
+}
