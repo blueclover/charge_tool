@@ -10,6 +10,11 @@ FactoryGirl.define do
     end
   end
 
+  factory :survey do
+    user
+    sequence(:name) { |n| "Example survey #{n}" }
+  end
+
   factory :booking do
     zip_code "94609"
     booking_date 5.days.ago
@@ -17,9 +22,11 @@ FactoryGirl.define do
 
   factory :booking_detail do
     sequence(:rank) { |n| n }
+    charge
   end
 
   factory :charge do
+    charge_type
   end
 
   factory :charge_type do

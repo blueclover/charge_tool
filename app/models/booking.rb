@@ -1,8 +1,11 @@
 class Booking < ActiveRecord::Base
   attr_accessible :booking_date, :zip_code, :booking_details_attributes
+  belongs_to :survey
   has_many :booking_details, dependent: :destroy
   has_many :charges, through: :booking_details
   accepts_nested_attributes_for :booking_details, allow_destroy: true
+
+  validates :survey_id, presence: true
 
   def score
     score = 0

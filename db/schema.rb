@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121011151234) do
+ActiveRecord::Schema.define(:version => 20121016221203) do
 
   create_table "booking_details", :force => true do |t|
     t.integer  "booking_id"
@@ -28,8 +28,10 @@ ActiveRecord::Schema.define(:version => 20121011151234) do
     t.date     "booking_date"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "survey_id"
   end
 
+  add_index "bookings", ["survey_id"], :name => "index_bookings_on_survey_id"
   add_index "bookings", ["zip_code"], :name => "index_bookings_on_zip_code"
 
   create_table "charge_aliases", :force => true do |t|
@@ -52,6 +54,16 @@ ActiveRecord::Schema.define(:version => 20121011151234) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  create_table "surveys", :force => true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "csv_file"
+  end
+
+  add_index "surveys", ["user_id"], :name => "index_surveys_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"

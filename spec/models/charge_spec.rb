@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Charge do
-  let!(:charge_type) { FactoryGirl.create(:charge_type) }
+  let(:charge_type) { FactoryGirl.create(:charge_type) }
   let(:charge) { Charge.new(charge_type_id: charge_type.id) }
 
   subject { charge }

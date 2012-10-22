@@ -2,10 +2,15 @@ require 'spec_helper'
 
 describe Booking do
 
-  let(:booking) { Booking.new(zip_code: "05301", booking_date: 5.days.ago) }
+  let(:survey)  { FactoryGirl.create(:survey) }
+
+  let(:booking) do
+    survey.bookings.build(zip_code: "05301", booking_date: 5.days.ago) }
+  end
 
   subject { booking }
 
+  it { should respond_to(:survey_id) }
   it { should respond_to(:zip_code) }
   it { should respond_to(:booking_date) }
   it { should respond_to(:booking_details) }
@@ -14,6 +19,13 @@ describe Booking do
   it { should respond_to(:bucket) }
 
   it { should be_valid }
+
+  describe "required attributes" do
+    describe "when survey_id is not present" do
+      before { booking.survey_id = nil }
+      it { should_not be_valid }
+    end
+  end
 
   describe "charge associations" do
     before { booking.save }

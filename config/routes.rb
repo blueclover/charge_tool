@@ -1,5 +1,6 @@
 ChargeTool::Application.routes.draw do
   resources :users
+  resources :surveys
   resources :bookings
   resources :sessions, only: [:new, :create, :destroy]
 
