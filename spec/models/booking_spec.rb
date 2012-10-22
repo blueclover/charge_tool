@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Booking do
 
-  let(:survey)  { FactoryGirl.create(:survey) }
+  let!(:survey)  { FactoryGirl.create(:survey) }
 
-  let(:booking) do
-    survey.bookings.build(zip_code: "05301", booking_date: 5.days.ago) }
+  let!(:booking) do
+    survey.bookings.build(zip_code: "05301", booking_date: 5.days.ago)
   end
 
   subject { booking }

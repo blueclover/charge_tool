@@ -16,11 +16,13 @@ FactoryGirl.define do
   end
 
   factory :booking do
+    survey
     zip_code "94609"
     booking_date 5.days.ago
   end
 
   factory :booking_detail do
+    booking
     sequence(:rank) { |n| n }
     charge
   end
