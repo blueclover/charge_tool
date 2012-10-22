@@ -4,7 +4,7 @@ describe "Survey pages" do
 
   subject { page }
 
-  let(:user) { FactoryGirl.create(:user) }
+  let!(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
   describe "survey creation" do
@@ -35,7 +35,7 @@ describe "Survey pages" do
       describe "after saving the survey" do
         before { click_button submit }
 
-        it { should have_selector('title', text: "Example Survey") }
+        it { should have_selector('title', text: "Edit survey") }
         it { should have_success_message('Survey') }
       end
     end

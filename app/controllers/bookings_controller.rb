@@ -38,7 +38,7 @@ class BookingsController < ApplicationController
   def destroy
     @booking.destroy
     flash[:success] = "Successfully destroyed booking."
-    redirect_to bookings_url
+    redirect_to survey_bookings_url(@survey)
   end
 
   private
