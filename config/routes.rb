@@ -1,7 +1,8 @@
 ChargeTool::Application.routes.draw do
   resources :users
-  resources :surveys
-  resources :bookings
+  resources :surveys do
+    resources :bookings
+  end
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'

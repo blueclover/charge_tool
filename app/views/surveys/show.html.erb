@@ -8,6 +8,7 @@
       <p><%= @survey.created_at.strftime("%m/%d/%Y") %></p>
       <p><%= pluralize(@survey.bookings.count, "booking") %></p>
       <p><%= @survey.csv_file %></p>
+      <p><%= link_to "View Bookings", survey_bookings_path(@survey) %></p>
       <p><%= link_to "Edit Survey", edit_survey_path(@survey) %></p>
     </section>
   </aside>
