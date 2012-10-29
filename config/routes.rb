@@ -1,15 +1,17 @@
 ChargeTool::Application.routes.draw do
-  resources :users
-  resources :surveys do
-    resources :bookings
-  end
-  resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'
 
-  match '/register', to: 'users#new'
-  match '/signin',   to: 'sessions#new'
-  match '/signout',  to: 'sessions#destroy', via: :delete
+  devise_for :users
+
+  resources :surveys do
+    resources :bookings
+  end
+
+  namespace :admin do
+    root :to => "base#index"
+    resources :users
+  end
 
   match '/help',     to: 'static_pages#help'
   match '/about',    to: 'static_pages#about'

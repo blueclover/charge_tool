@@ -1,0 +1,16 @@
+<%= form_for [:admin, @user] do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <%= f.label :email %>
+  <%= f.text_field :email %>
+
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+
+  <p>
+    <%= f.label :admin, "Admin?" %>
+    <%= f.check_box :admin %>
+  </p>
+
+  <%= f.submit class: "btn btn-large btn-primary" %>
+<% end %>
