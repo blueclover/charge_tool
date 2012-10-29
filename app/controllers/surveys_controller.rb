@@ -1,8 +1,8 @@
 class SurveysController < ApplicationController
-  before_filter :signed_in_user
+  before_filter :authenticate_user!
+  before_filter :find_survey, :only => [:show, :edit, :update, :destroy]
 
   def show
-    @survey = Survey.find(params[:id])
   end
   def new
     @survey = Survey.new
@@ -19,11 +19,9 @@ class SurveysController < ApplicationController
   end
 
   def edit
-    @survey = Survey.find(params[:id])
   end
 
   def update
-    @survey = Survey.find(params[:id])
     if @survey.update_attributes(params[:survey])
       if @survey.csv_file.to_s  =~ /\.csv\Z/
         process_data!("public/#{@survey.csv_file.to_s}",@survey.id)
@@ -34,9 +32,17 @@ class SurveysController < ApplicationController
     else
       render 'edit'
     end
-  end
+    end
 
   def destroy
+    if @survey.user == current_user
+      @survey.destroy
+      flash[:notice] = "Survey has been deleted."
+    else
+      flash[:alert] = "You cannot delete a survey created by another user."
+    end
+
+    redirect_to root_path
   end
 
   def process_data!(file, survey_id)
@@ -109,4 +115,9 @@ class SurveysController < ApplicationController
     end
 
   end
+
+  private
+    def find_survey
+      @survey = Survey.find(params[:id])
+    end
 end

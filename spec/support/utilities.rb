@@ -17,3 +17,9 @@ def sign_in_as!(user)
   visit new_user_session_path
   fill_signin_fields user
 end
+
+def define_permission!(user, action, thing)
+  Permission.create!(:user => user,
+                     :action => action,
+                     :thing => thing)
+end

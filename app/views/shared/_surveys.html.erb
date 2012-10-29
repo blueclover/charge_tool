@@ -1,0 +1,6 @@
+<% if @surveys.any? %>
+  <ol class="surveys">
+    <%= render partial: 'shared/survey', collection: @surveys %>
+  </ol>
+  <%= will_paginate @surveys %>
+<% end %>

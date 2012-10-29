@@ -1,5 +1,5 @@
 class BookingsController < ApplicationController
-  before_filter :signed_in_user
+  before_filter :authenticate_user!
   before_filter :find_survey
   before_filter :find_booking, :only => [:show, :edit, :update, :destroy]
 
