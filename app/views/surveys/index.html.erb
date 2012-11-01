@@ -1,0 +1,16 @@
+<% provide(:title, 'All Surveys') %>
+
+<div class="row">
+  <aside class="span4">
+    <%= link_to "New Survey", new_survey_path,
+                class: "btn btn-large" %>
+  </aside>
+  <div class="span6">
+    <h3>All Surveys</h3>
+    <%= will_paginate %>
+      <ol class="surveys">
+        <%= render @surveys %>
+      </ol>
+      <%= will_paginate %>
+  </div>
+</div>

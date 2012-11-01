@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
 
   let(:user) do
-    User.new(name: "Example User", email: "user@example.com",
+    User.new(email: "user@example.com",
              password: "foobar", password_confirmation: "foobar")
   end
 

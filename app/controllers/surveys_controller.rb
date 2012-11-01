@@ -1,7 +1,10 @@
 class SurveysController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :find_survey, :only => [:show, :edit, :update, :destroy]
+  before_filter :find_survey, only: [:show, :edit, :update, :destroy, :upload]
 
+  def index
+    @surveys = Survey.for(current_user).paginate(page: params[:page])
+  end
   def show
   end
   def new
@@ -12,7 +15,7 @@ class SurveysController < ApplicationController
     @survey = current_user.surveys.build(params[:survey])
     if @survey.save
       flash[:success] = "Survey created!"
-      redirect_to edit_survey_path(@survey)
+      redirect_to upload_survey_path(@survey)
     else
       render :new
     end
@@ -23,8 +26,11 @@ class SurveysController < ApplicationController
 
   def update
     if @survey.update_attributes(params[:survey])
-      if @survey.csv_file.to_s  =~ /\.csv\Z/
+      if params[:survey][:csv_file] && @survey.csv_file.to_s  =~ /\.csv\Z/
         process_data!("public/#{@survey.csv_file.to_s}",@survey.id)
+        #@survey.remove_csv_file = true
+        #@survey.save
+        flash[:success] = "File processed"
       else
         flash[:success] = "Survey updated"
       end
@@ -32,23 +38,25 @@ class SurveysController < ApplicationController
     else
       render 'edit'
     end
-    end
+  end
 
   def destroy
-    if @survey.user == current_user
+    if current_user.admin? || @survey.user == current_user
       @survey.destroy
       flash[:notice] = "Survey has been deleted."
     else
       flash[:alert] = "You cannot delete a survey created by another user."
     end
 
-    redirect_to root_path
+    redirect_to surveys_path
+  end
+
+  def upload
   end
 
   def process_data!(file, survey_id)
-    booking_header_count = 2
+    # booking_header_count = 2
     charge_header_count = 5
-    last_index = booking_header_count + charge_header_count - 1
 
     booking_headers = [
         "zip_code",
@@ -99,25 +107,20 @@ class SurveysController < ApplicationController
             WHERE a.charge_id = c.id AND a.alias = #{val}
             RETURNING id
           "
-          detail_id = ActiveRecord::Base.connection.execute(sql)
+          ActiveRecord::Base.connection.execute(sql)
           rank += 1
-        else
-
         end
       end
-
-
-      #booking_id = ActiveRecord::Base.connection.last_inserted_id(res)
-
-      # do some cool stuff, like create records in other tables that reference bar_id
-      # use ActiveRecord::Base.connection.execute(your_sql) in subsequent calls.
-      # no need to close the connection, or reopen it before calling execute.
     end
 
   end
 
   private
     def find_survey
-      @survey = Survey.find(params[:id])
+      @survey = Survey.for(current_user).find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+      flash[:alert] = "The survey you were looking" +
+          " for could not be found."
+      redirect_to root_path
     end
 end

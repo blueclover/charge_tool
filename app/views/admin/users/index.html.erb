@@ -1,13 +1,16 @@
-<% provide(:title, 'All users') %>
+<% provide(:title, 'All Users') %>
 
-<h1>All users</h1>
-
-<%= link_to "New User", new_admin_user_path %>
-
-<%= will_paginate %>
-
-<ul class="users">
-  <%= render @users %>
-</ul>
-
-<%= will_paginate %>
+<div class="row">
+  <aside class="span4">
+    <%= link_to "New User", new_admin_user_path,
+                class: "btn btn-large" %>
+  </aside>
+  <div class="span6">
+    <h3>All Users</h3>
+    <%= will_paginate %>
+    <ul class="users">
+      <%= render @users %>
+    </ul>
+    <%= will_paginate %>
+  </div>
+</div>

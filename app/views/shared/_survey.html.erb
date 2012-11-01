@@ -5,9 +5,4 @@
   <span class="timestamp">
     Created <%= time_ago_in_words(survey.created_at) %> ago.
   </span>
-  <% if survey.user == current_user %>
-    <%= link_to "delete", survey, method: :delete,
-                data: { confirm: "Are you sure you want to delete this survey?" },
-                title: survey.name %>
-  <% end %>
 </li>

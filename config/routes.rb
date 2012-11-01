@@ -6,6 +6,10 @@ ChargeTool::Application.routes.draw do
 
   resources :surveys do
     resources :bookings
+
+    member do
+      get 'upload'
+    end
   end
 
   namespace :admin do

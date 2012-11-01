@@ -1,0 +1,18 @@
+<% provide(:title, "Upload file") %>
+<h1>Upload file</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for( @survey, :html => {:multipart => true} ) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.file_field :csv_file %>
+      <label>
+        <%= f.check_box :remove_csv_file %>
+        Remove file
+      </label> <br >
+      <%= f.submit "Process file", class: "btn btn-primary" %>
+      <%= link_to "Cancel", @survey, class: "btn" %>
+    <% end %>
+  </div>
+</div>

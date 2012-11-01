@@ -43,7 +43,11 @@ class BookingsController < ApplicationController
 
   private
     def find_survey
-      @survey = Survey.find(params[:survey_id])
+      @survey = Survey.for(current_user).find(params[:survey_id])
+      rescue ActiveRecord::RecordNotFound
+      flash[:alert] = "The survey you were looking" +
+          " for could not be found."
+      redirect_to root_path
     end
     def find_booking
       @booking = @survey.bookings.find(params[:id])

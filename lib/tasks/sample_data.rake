@@ -1,29 +1,32 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    #make_users
+    make_users
     make_charge_types
     make_charges
     make_charge_aliases
-    #make_bookings
-    #make_booking_details
+    make_surveys
+    make_bookings
+    make_booking_details
   end
 end
 
 def make_users
   admin = User.create!(#name:     "Example User",
-                       email:    "example@railstutorial.org",
+                       email:    "admin@cochs.org",
                        password: "foobar",
                        password_confirmation: "foobar")
   admin.toggle!(:admin)
-  99.times do |n|
+  admin.confirm!
+  5.times do |n|
     #name  = Faker::Name.name
-    email = "example-#{n+1}@railstutorial.org"
+    email = "user-#{n+1}@cochs.org"
     password  = "password"
-    User.create!(#name:     name,
+    user = User.create!(#name:     name,
                  email:    email,
                  password: password,
                  password_confirmation: password)
+    user.confirm!
   end
 end
 
@@ -48,10 +51,26 @@ def make_charge_aliases
   end
 end
 
+def make_surveys
+  admin = User.find_by_email("admin@cochs.org")
+  50.times do |n|
+    admin.surveys.create!(name: "Example survey #{n}")
+  end
+  users = User.all(limit: 4)
+  users.each do |user|
+    5.times do |n|
+      user.surveys.create!(name: "User #{user.id} survey #{n}")
+    end
+  end
+end
+
 def make_bookings
-  2.times do |n|
-    Booking.create!(zip_code:     "94609",
-                    booking_date: n.days.ago)
+  surveys = Survey.all
+  surveys.each do |survey|
+    10.times do |n|
+      survey.bookings.create!(zip_code:     "94609",
+                              booking_date: n.days.ago)
+    end
   end
 end
 

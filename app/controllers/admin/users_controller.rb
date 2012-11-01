@@ -16,6 +16,7 @@ class Admin::UsersController < Admin::BaseController
   def create
     @user = User.new(params[:user], :as => :admin)
     if @user.save
+      @user.confirm!
       flash[:success] = "User has been created."
       redirect_to admin_users_path
     else
