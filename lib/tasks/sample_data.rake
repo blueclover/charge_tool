@@ -17,7 +17,7 @@ def make_users
                        password: "foobar",
                        password_confirmation: "foobar")
   admin.toggle!(:admin)
-  admin.confirm!
+  #admin.confirm!
   5.times do |n|
     #name  = Faker::Name.name
     email = "user-#{n+1}@cochs.org"
@@ -26,7 +26,7 @@ def make_users
                  email:    email,
                  password: password,
                  password_confirmation: password)
-    user.confirm!
+    #user.confirm!
   end
 end
 
