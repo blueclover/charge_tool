@@ -27,7 +27,7 @@ class SurveysController < ApplicationController
   def update
     if @survey.update_attributes(params[:survey])
       if params[:survey][:csv_file] && @survey.csv_file.to_s  =~ /\.csv\Z/
-        process_data!("public/#{@survey.csv_file.to_s}",@survey.id)
+        process_data!("#{@survey.csv_file.to_s}"[1..-1],@survey.id)
         #@survey.remove_csv_file = true
         #@survey.save
         flash[:success] = "File processed"

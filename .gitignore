@@ -16,7 +16,7 @@
 /tmp
 
 # Ignore uploads
-/public/uploads
+/files
 
 # Ignore other unneeded files.
 doc/

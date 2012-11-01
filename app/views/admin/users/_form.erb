@@ -4,13 +4,17 @@
   <%= f.label :email %>
   <%= f.text_field :email %>
 
+  <% if @user != current_user %>
+
   <%= f.label :password %>
   <%= f.password_field :password %>
 
-  <label>
-    <%= f.check_box :admin %>
-    Admin
-  </label><br/>
+
+    <label>
+      <%= f.check_box :admin %>
+      Admin
+    </label><br/>
+  <% end %>
 
   <%= f.submit class: "btn btn-primary" %>
   <%= link_to "Cancel", :back, class: "btn" %>
