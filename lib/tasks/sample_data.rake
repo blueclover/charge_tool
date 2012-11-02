@@ -12,21 +12,23 @@ namespace :db do
 end
 
 def make_users
-  admin = User.create!(#name:     "Example User",
+  admin = User.new(#name:     "Example User",
                        email:    "admin@cochs.org",
                        password: "foobar",
                        password_confirmation: "foobar")
+  #admin.skip_confirmation!
+  admin.save!
   admin.toggle!(:admin)
-  #admin.confirm!
   5.times do |n|
     #name  = Faker::Name.name
     email = "user-#{n+1}@cochs.org"
     password  = "password"
-    user = User.create!(#name:     name,
+    user = User.new(#name:     name,
                  email:    email,
                  password: password,
                  password_confirmation: password)
-    #user.confirm!
+    #user.skip_confirmation!
+    user.save!
   end
 end
 

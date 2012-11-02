@@ -17,7 +17,7 @@ class BookingsController < ApplicationController
     @booking = @survey.bookings.build(params[:booking])
     if @booking.save
       flash[:success] = "Successfully created booking."
-      redirect_to [@project, @booking]
+      redirect_to [@survey, @booking]
     else
       render :new
     end
