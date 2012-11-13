@@ -1,0 +1,6 @@
+<%= fields_for @survey do |f| %>
+  <%= f.fields_for :assets, child_index: number do |asset| %>
+    <% number += 1 %>
+    <%= asset.file_field :asset %>
+  <% end %>
+<% end %>

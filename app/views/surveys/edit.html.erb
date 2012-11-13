@@ -3,15 +3,6 @@
 
 <div class="row">
   <div class="span6 offset3">
-    <%= form_for( @survey ) do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
-
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.submit "Save changes", class: "btn btn-primary" %>
-      <%= link_to "Cancel", :back, class: "btn" %>
-    <% end %>
-
+      <%= render 'form' %>
   </div>
 </div>

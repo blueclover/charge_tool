@@ -12,7 +12,7 @@ gem 'bootstrap-will_paginate', '0.0.6'
 gem 'devise'
 gem 'email_spec'
 
-gem 'carrierwave'
+gem 'paperclip', '2.7.0'
 
 group :development, :test do
   gem 'rspec-rails', '2.10.0'

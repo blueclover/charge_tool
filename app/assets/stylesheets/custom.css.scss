@@ -24,6 +24,7 @@ html {
 
 body {
   padding-top: 60px;
+  font-family: Arial;
 }
 
 section {
@@ -216,6 +217,25 @@ input, textarea, select, .uneditable-input {
     border-top: 1px solid #e8e8e8;
   }
 }
+
+/* assets */
+
+.assets {
+  list-style: none;
+  margin: 5px 0 10px 0;
+  border-bottom: 1px solid #e8e8e8;
+
+  li {
+    padding: 5px 0 0 0;
+    border-top: 1px solid #e8e8e8;
+  }
+
+  form {
+    float: right;
+    margin: 0 10px 0 0;
+  }
+}
+
 .title {
   display: block;
 }

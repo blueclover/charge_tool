@@ -1,16 +1,18 @@
 class Survey < ActiveRecord::Base
-  attr_accessible :name, :csv_file, :remove_csv_file
+  attr_accessible :name, :assets_attributes
   belongs_to  :user
   has_many :bookings, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :user_id, presence: true
 
+  has_many :assets, dependent: :destroy
+
+  accepts_nested_attributes_for :assets
+
   has_many :permissions, :as => :thing, dependent: :delete_all
 
   default_scope order: 'surveys.created_at DESC'
-
-  mount_uploader :csv_file, CsvUploader
 
   def self.viewable_by(user)
     #join = "LEFT JOIN permissions ON permissions.thing_id = surveys.id " +

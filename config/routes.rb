@@ -4,6 +4,12 @@ ChargeTool::Application.routes.draw do
 
   devise_for :users
 
+  resources :files do
+    member do
+      put :process_csv
+    end
+  end
+
   resources :surveys do
     resources :bookings
 

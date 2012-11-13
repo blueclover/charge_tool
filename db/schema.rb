@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121029175905) do
+ActiveRecord::Schema.define(:version => 20121109200113) do
+
+  create_table "assets", :force => true do |t|
+    t.string   "asset_file_name"
+    t.integer  "asset_file_size"
+    t.string   "asset_content_type"
+    t.datetime "asset_updated_at"
+    t.integer  "survey_id"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.boolean  "processed",          :default => false
+  end
+
+  add_index "assets", ["survey_id"], :name => "index_assets_on_survey_id"
 
   create_table "booking_details", :force => true do |t|
     t.integer  "booking_id"
@@ -69,7 +82,6 @@ ActiveRecord::Schema.define(:version => 20121029175905) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "csv_file"
   end
 
   add_index "surveys", ["user_id"], :name => "index_surveys_on_user_id"
