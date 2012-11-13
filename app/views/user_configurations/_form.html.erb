@@ -1,0 +1,20 @@
+<%= form_for( @user_configuration ) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <%= f.label :booking_date_field_name %>
+  <%= f.text_field :booking_date_field_name %>
+  <%= f.label :zip_code_field_name %>
+  <%= f.text_field :zip_code_field_name %>
+  <%= f.label :city_field_name %>
+  <%= f.text_field :city_field_name %>
+  <%= f.label :state_field_name %>
+  <%= f.text_field :state_field_name %>
+  <%= f.label :charge_field_prefix %>
+  <%= f.text_field :charge_field_prefix %>
+  <%= f.label :num_charges %>
+  <%= f.text_field :num_charges %>
+
+  <p>
+    <%= f.submit "Save Settings", class: "btn btn-primary" %>
+    <%= link_to "Cancel", :back, class: "btn" %>
+  </p>
+<% end %>

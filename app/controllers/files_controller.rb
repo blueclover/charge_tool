@@ -44,10 +44,19 @@ class FilesController < ApplicationController
   end
 
   def proper_headers?(file_path)
-    required_fields = { 'zip_code'  => 0,
-                        'charge_1'  => 0,
-                        'junk'      => 0
-    }
+    user_settings = UserConfiguration.find_by_user_id(current_user.id)
+
+    required_fields = {}
+    ['booking_date', 'zip_code', 'city', 'state'].each do |field|
+      custom_name = user_settings.send(field + '_field_name')
+      required_fields[custom_name] = 0 unless custom_name.empty?
+    end
+
+    prefix = user_settings.charge_field_prefix
+
+    user_settings.num_charges.times do |n|
+      required_fields["#{prefix}#{n+1}"] = 0
+    end
 
     # open file and read just first line
     fields = CSV.parse(File.open(file_path, &:readline))[0]

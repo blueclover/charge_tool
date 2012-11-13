@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121109200113) do
+ActiveRecord::Schema.define(:version => 20121113184030) do
 
   create_table "assets", :force => true do |t|
     t.string   "asset_file_name"
@@ -42,8 +42,12 @@ ActiveRecord::Schema.define(:version => 20121109200113) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.integer  "survey_id"
+    t.string   "city"
+    t.string   "state"
   end
 
+  add_index "bookings", ["city"], :name => "index_bookings_on_city"
+  add_index "bookings", ["state"], :name => "index_bookings_on_state"
   add_index "bookings", ["survey_id"], :name => "index_bookings_on_survey_id"
   add_index "bookings", ["zip_code"], :name => "index_bookings_on_zip_code"
 
@@ -85,6 +89,20 @@ ActiveRecord::Schema.define(:version => 20121109200113) do
   end
 
   add_index "surveys", ["user_id"], :name => "index_surveys_on_user_id"
+
+  create_table "user_configurations", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "booking_date_field_name", :default => "booking_date"
+    t.string   "zip_code_field_name",     :default => "zip_code"
+    t.string   "city_field_name",         :default => "city"
+    t.string   "state_field_name",        :default => "state"
+    t.string   "charge_field_prefix",     :default => "charge_"
+    t.integer  "num_charges",             :default => 5
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+  end
+
+  add_index "user_configurations", ["user_id"], :name => "index_user_configurations_on_user_id", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "",    :null => false

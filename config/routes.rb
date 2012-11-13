@@ -4,6 +4,8 @@ ChargeTool::Application.routes.draw do
 
   devise_for :users
 
+  resources :user_configurations
+
   resources :files do
     member do
       put :process_csv
@@ -23,6 +25,7 @@ ChargeTool::Application.routes.draw do
     resources :users
   end
 
+  match '/settings', to: 'user_configurations#edit'
   match '/help',     to: 'static_pages#help'
   match '/about',    to: 'static_pages#about'
 

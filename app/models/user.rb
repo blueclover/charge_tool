@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :admin, :as => :admin
 
   has_many :surveys, dependent: :destroy
+  has_one :user_configuration, dependent: :destroy
 
   default_scope order: 'email'
 
