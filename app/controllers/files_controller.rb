@@ -34,8 +34,10 @@ class FilesController < ApplicationController
   end
 
   def process_csv
-    if proper_headers?(@asset.asset.path)
-      flash[:success] = "File has proper headers."
+    file_path = @asset.asset.path
+    if proper_headers?(file_path)
+      process_data!(file_path, @survey.id)
+      flash[:success] = "File has been processed."
     else
       flash[:alert] = "File does not have proper headers."
     end
@@ -44,18 +46,12 @@ class FilesController < ApplicationController
   end
 
   def proper_headers?(file_path)
-    user_settings = UserConfiguration.find_by_user_id(current_user.id)
+    user_settings = current_user.settings
+    field_names = user_settings.booking_headers + user_settings.charge_headers
 
     required_fields = {}
-    ['booking_date', 'zip_code', 'city', 'state'].each do |field|
-      custom_name = user_settings.send(field + '_field_name')
-      required_fields[custom_name] = 0 unless custom_name.empty?
-    end
-
-    prefix = user_settings.charge_field_prefix
-
-    user_settings.num_charges.times do |n|
-      required_fields["#{prefix}#{n+1}"] = 0
+    field_names.each do |field|
+      required_fields[field] = 0
     end
 
     # open file and read just first line
@@ -72,37 +68,33 @@ class FilesController < ApplicationController
     true
   end
 
-  def process_data!(file, survey_id)
-    # booking_header_count = 2
-    charge_header_count = 5
+  def process_data!(file_path, survey_id)
+    user_settings = current_user.settings
 
-    booking_headers = [
-        "zip_code",
-        "booking_date"
-    ]
+    db_field_names  = user_settings.required_fields
+    csv_field_names = user_settings.booking_headers
 
-    charge_headers = []
-    1.upto(charge_header_count) { |i| charge_headers << "charge_#{i}" }
+    charge_headers = user_settings.charge_headers
 
     ActiveRecord::Base.establish_connection
 
     created_at = Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
-    CSV.foreach(file, {headers: :first_row}) do |row|
+    CSV.foreach(file_path, {headers: :first_row}) do |row|
       sql_vals = []
 
       #booking_header_count.times do |idx|
       #  val = row[idx]
       #  sql_vals << ActiveRecord::Base.connection.quote(val)
       #end
-      booking_headers.each do |column|
+      csv_field_names.each do |column|
         val = row[column]
         sql_vals << ActiveRecord::Base.connection.quote(val)
       end
 
       sql = "
         INSERT INTO bookings
-          (survey_id, #{booking_headers.join(', ')}, created_at, updated_at)
+          (survey_id, #{db_field_names.join(', ')}, created_at, updated_at)
         VALUES
           (#{survey_id}, #{sql_vals.join(', ')}, '#{created_at}', '#{created_at}')
         RETURNING id
@@ -110,23 +102,19 @@ class FilesController < ApplicationController
 
       booking_id = ActiveRecord::Base.connection.insert(sql)
 
-      rank = 1
-      #booking_header_count.upto(last_index) do |idx|
-      #  val = row[idx]
-      charge_headers.each do |column|
+      charge_headers.each_with_index do |column, i|
         val = row[column]
         if val.to_s.length > 0
           val = ActiveRecord::Base.connection.quote(val)
 
           sql = "
             INSERT INTO booking_details (booking_id, rank, charge_id, created_at, updated_at)
-            SELECT #{booking_id}, #{rank}, c.id, '#{created_at}', '#{created_at}'
+            SELECT #{booking_id}, #{i+1}, c.id, '#{created_at}', '#{created_at}'
             FROM charge_aliases a, charges c
             WHERE a.charge_id = c.id AND a.alias = #{val}
             RETURNING id
           "
           ActiveRecord::Base.connection.execute(sql)
-          rank += 1
         end
       end
     end

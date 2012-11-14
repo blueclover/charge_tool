@@ -18,4 +18,8 @@ class User < ActiveRecord::Base
   def to_s
     "#{email} (#{admin? ? "Admin" : "User"})"
   end
+
+  def settings
+    user_configuration || build_user_configuration
+  end
 end
