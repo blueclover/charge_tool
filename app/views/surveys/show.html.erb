@@ -7,6 +7,10 @@
       </h1>
       <p>Created <%= @survey.created_at.strftime("%m/%d/%Y") %></p>
       <p><%= pluralize(@survey.bookings.count, "booking") %></p>
+      <p><%= pluralize(@survey.bookings.interesting.count, "interesting booking") %></p>
+      <p><%= pluralize(@survey.bookings.interesting.with_zip.count, "interesting booking") %>
+        with zip codes</p>
+      <p><%= @survey.bookings.interesting.with_ca_zip.count %> with CA zip codes
       <% if @survey.assets.exists? %>
         <h4>Attached Files</h4>
         <ol class="assets">
@@ -15,7 +19,7 @@
               <%= button_to 'process file',
                             process_csv_file_path(asset),
                             method: :put,
-                            class: "btn btn-mini"%>
+                            class: "btn btn-mini" %>
               <%= File.basename(asset.asset_file_name) %>
               <p>
                 <small><%= number_to_human_size(asset.asset.size) %></small>
@@ -24,6 +28,10 @@
           <% end %>
         </ol>
       <% end %>
+      <%= button_to 'Commit Scores',
+                    commit_scores_survey_path(@survey),
+                    method: :put,
+                    class: "btn" %>
       <p><%= link_to "Edit Survey", edit_survey_path(@survey), class: "btn" %></p>
       <p><%= link_to "View Bookings", survey_bookings_path(@survey), class: "btn" %></p>
     </section>

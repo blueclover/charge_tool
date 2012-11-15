@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113184030) do
+ActiveRecord::Schema.define(:version => 20121115215018) do
 
   create_table "assets", :force => true do |t|
     t.string   "asset_file_name"
@@ -44,9 +44,11 @@ ActiveRecord::Schema.define(:version => 20121113184030) do
     t.integer  "survey_id"
     t.string   "city"
     t.string   "state"
+    t.integer  "score"
   end
 
   add_index "bookings", ["city"], :name => "index_bookings_on_city"
+  add_index "bookings", ["score"], :name => "index_bookings_on_score"
   add_index "bookings", ["state"], :name => "index_bookings_on_state"
   add_index "bookings", ["survey_id"], :name => "index_bookings_on_survey_id"
   add_index "bookings", ["zip_code"], :name => "index_bookings_on_zip_code"

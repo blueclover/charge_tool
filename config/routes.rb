@@ -16,7 +16,7 @@ ChargeTool::Application.routes.draw do
     resources :bookings
 
     member do
-      get 'upload'
+      put :commit_scores
     end
   end
 

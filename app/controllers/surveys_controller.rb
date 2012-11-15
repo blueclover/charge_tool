@@ -1,6 +1,7 @@
 class SurveysController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :find_survey, only: [:show, :edit, :update, :destroy, :upload]
+  before_filter :find_survey,
+                only: [:show, :edit, :update, :destroy, :upload, :commit_scores]
 
   def index
     @surveys = Survey.for(current_user).paginate(page: params[:page])
@@ -47,6 +48,11 @@ class SurveysController < ApplicationController
 
   def upload
     @survey.assets.build
+  end
+
+  def commit_scores
+    @survey.bookings.all.each { |b| b.save }
+    redirect_to @survey
   end
 
   private
