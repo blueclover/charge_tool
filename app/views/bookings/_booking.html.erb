@@ -1,0 +1,8 @@
+<li>
+  <%= link_to "Booking #{booking.id}:", [@survey, booking] %>
+  <%= pluralize(booking.charges.size, "Charge") %> |
+  Bucket: <%= booking.bucket %>
+  <%= link_to "Delete", [@survey, booking], :method => :delete,
+              class: "btn btn-mini",
+              :confirm => "Are you sure you want to delete this booking?" %>
+</li>

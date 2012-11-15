@@ -42,8 +42,8 @@ describe Survey do
   end
 
   describe "booking associations" do
-    before { survey.save }
     before do
+      survey.save
       FactoryGirl.create(:booking, survey: survey)
       FactoryGirl.create(:booking, survey: survey)
     end
@@ -52,12 +52,18 @@ describe Survey do
       survey.bookings.count.should == 2
     end
 
-    it "should destroy associated bookings" do
+    it "should destroy associated bookings and booking details" do
+      survey.bookings.each do |b|
+        FactoryGirl.create(:booking_detail, booking: b)
+      end
       bookings = survey.bookings.dup
       survey.destroy
       bookings.should_not be_empty
       bookings.each do |booking|
         Booking.find_by_id(booking.id).should be_nil
+        booking.booking_details.each do |detail|
+          BookingDetail.find_by_id(detail.id).should be_nil
+        end
       end
     end
   end

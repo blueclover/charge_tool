@@ -4,6 +4,7 @@ class BookingsController < ApplicationController
   before_filter :find_booking, :only => [:show, :edit, :update, :destroy]
 
   def index
+    @bookings = @survey.bookings.paginate(page: params[:page])
   end
 
   def show

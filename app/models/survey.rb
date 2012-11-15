@@ -1,7 +1,9 @@
 class Survey < ActiveRecord::Base
   attr_accessible :name, :assets_attributes
   belongs_to  :user
-  has_many :bookings, dependent: :destroy
+
+  before_destroy :delete_booking_details!
+  has_many :bookings, dependent: :delete_all
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :user_id, presence: true
@@ -27,5 +29,13 @@ class Survey < ActiveRecord::Base
 
   def self.for(user)
     user.admin? ? Survey : Survey.viewable_by(user)
+  end
+
+  def delete_booking_details!
+    sql = "DELETE FROM booking_details " +
+          "USING bookings " +
+          "WHERE bookings.id = booking_details.booking_id " +
+          "AND bookings.survey_id = #{self.id}"
+    ActiveRecord::Base.connection.execute(sql)
   end
 end

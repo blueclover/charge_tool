@@ -33,24 +33,26 @@ def make_users
 end
 
 def make_charge_types
-  5.times do |n|
-    ChargeType.create!(score: 2 ** (n % 5))
+  [0,8,4,4,16,1,2].each do |n|
+    ChargeType.create!(score: n)
   end
 end
 
 def make_charges
-  charge_types = ChargeType.all
-  charge_types.each { |type| 10.times { type.charges.create! } }
+#  charge_types = ChargeType.all
+#  charge_types.each { |type| 10.times { type.charges.create! } }
+  populate_table('charges')
 end
 
 def make_charge_aliases
-  charges = Charge.all
-  charges.each do |charge|
-    2.times do |n|
-      letter = ('a'..'z').to_a[n]
-      charge.charge_aliases.create!(alias: "#{charge.id}#{letter}")
-    end
-  end
+  #charges = Charge.all
+  #charges.each do |charge|
+  #  2.times do |n|
+  #    letter = ('a'..'z').to_a[n]
+  #    charge.charge_aliases.create!(alias: "#{charge.id}#{letter}")
+  #  end
+  #end
+  populate_table('charge_aliases')
 end
 
 def make_surveys
@@ -86,5 +88,27 @@ def make_booking_details
       booking.booking_details.create!(rank:   n,
                                       charge_id: charge.id)
     end
+  end
+end
+
+def populate_table(table)
+  file_path = "files/#{table}.csv"
+  field_names = CSV.parse(File.open(file_path, &:readline))[0]
+
+  created_at = Time.now.strftime("%Y-%m-%d %H:%M:%S")
+
+  CSV.foreach(file_path, {headers: :first_row}) do |row|
+    sql_vals = []
+
+    field_names.each do |column|
+      val = row[column]
+      sql_vals << ActiveRecord::Base.connection.quote(val)
+    end
+
+    sql = "INSERT INTO #{table} " +
+        "(#{field_names.join(', ')}, created_at, updated_at) " +
+        "VALUES " +
+        "(#{sql_vals.join(', ')}, '#{created_at}', '#{created_at}')"
+    ActiveRecord::Base.connection.insert(sql)
   end
 end
