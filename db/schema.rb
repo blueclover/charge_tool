@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121115215018) do
+ActiveRecord::Schema.define(:version => 20121203224736) do
 
   create_table "assets", :force => true do |t|
     t.string   "asset_file_name"
@@ -64,8 +64,9 @@ ActiveRecord::Schema.define(:version => 20121115215018) do
 
   create_table "charge_types", :force => true do |t|
     t.integer  "score"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "description"
   end
 
   create_table "charges", :force => true do |t|
@@ -73,6 +74,17 @@ ActiveRecord::Schema.define(:version => 20121115215018) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  create_table "filter_criteria", :force => true do |t|
+    t.integer  "survey_id"
+    t.integer  "charge_type_id"
+    t.integer  "significance"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "filter_criteria", ["survey_id", "charge_type_id"], :name => "index_filter_criteria_on_survey_id_and_charge_type_id", :unique => true
+  add_index "filter_criteria", ["survey_id"], :name => "index_filter_criteria_on_survey_id"
 
   create_table "permissions", :force => true do |t|
     t.integer  "user_id"

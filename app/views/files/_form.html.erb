@@ -1,6 +1,9 @@
 <%= fields_for @survey do |f| %>
   <%= f.fields_for :assets, child_index: number do |asset| %>
     <% number += 1 %>
-    <%= asset.file_field :asset %>
+    <% if asset.object.new_record? %>
+      Upload File
+      <%= asset.file_field :asset, selected: asset.object.asset_file_name %>
+    <% end %>
   <% end %>
 <% end %>

@@ -1,17 +1,21 @@
 class Survey < ActiveRecord::Base
-  attr_accessible :name, :assets_attributes
+  attr_accessible :name, :assets_attributes, :filter_criteria_attributes
   belongs_to  :user
 
   before_destroy :delete_booking_details!
   has_many :bookings, dependent: :delete_all
 
+  has_many :filter_criteria, dependent: :delete_all
+  accepts_nested_attributes_for :filter_criteria
+
   has_many :assets, dependent: :destroy
+  accepts_nested_attributes_for :assets
+
   has_many :permissions, :as => :thing, dependent: :delete_all
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :user_id, presence: true
 
-  accepts_nested_attributes_for :assets
 
   default_scope order: 'surveys.created_at DESC'
 
@@ -28,10 +32,6 @@ class Survey < ActiveRecord::Base
 
   def self.for(user)
     user.admin? ? Survey : Survey.viewable_by(user)
-  end
-
-  def commit_scores!
-    bookings.each.save
   end
 
   def delete_booking_details!

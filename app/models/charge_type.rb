@@ -1,5 +1,5 @@
 class ChargeType < ActiveRecord::Base
-  attr_accessible :score
+  attr_accessible :score, :description
 
   has_many :charges
 

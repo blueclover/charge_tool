@@ -1,0 +1,9 @@
+<%= f.hidden_field :charge_type_id %>
+<%= label_tag (ChargeType.find(f.object.charge_type_id).description) %>
+<%= f.select(:significance,
+                 options_for_select([['Ignore',  0],
+                                     ['Include', 1],
+                                     ['Exclude', -1]],
+                 selected: f.object.significance)) %>
+<br />
+

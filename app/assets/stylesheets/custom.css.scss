@@ -252,3 +252,18 @@ aside {
     margin-bottom: 5px;
   }
 }
+
+/* filter */
+
+#filter {
+  label {
+    vertical-align: 5px;
+    display: inline;
+    margin-right: 5px;
+  }
+
+  select {
+    padding: 3px;
+    width: 30%;
+  }
+}

@@ -36,8 +36,10 @@ class FilesController < ApplicationController
   def process_csv
     file_path = @asset.asset.path
     if proper_headers?(file_path)
+      t = Time.now
       process_data!(file_path, @survey.id)
-      flash[:success] = "File has been processed."
+      t = Time.now - t
+      flash[:success] = "File processed in #{t} seconds."
     else
       flash[:alert] = "File does not have proper headers."
     end
@@ -103,12 +105,12 @@ class FilesController < ApplicationController
         end
 
         sql = "
-          INSERT INTO bookings
-            (survey_id, #{db_field_names.join(', ')}, created_at, updated_at)
-          VALUES
-            (#{survey_id}, #{sql_vals.join(', ')}, '#{created_at}', '#{created_at}')
-          RETURNING id
-        "
+            INSERT INTO bookings
+              (survey_id, #{db_field_names.join(', ')}, created_at, updated_at)
+            VALUES
+              (#{survey_id}, #{sql_vals.join(', ')}, '#{created_at}', '#{created_at}')
+            RETURNING id
+          "
 
         booking_id = ActiveRecord::Base.connection.insert(sql)
 
@@ -118,15 +120,70 @@ class FilesController < ApplicationController
             val = ActiveRecord::Base.connection.quote(val)
 
             sql = "
-              INSERT INTO booking_details (booking_id, rank, charge_id, created_at, updated_at)
-              SELECT #{booking_id}, #{i+1}, c.id, '#{created_at}', '#{created_at}'
-              FROM charge_aliases a, charges c
-              WHERE a.charge_id = c.id AND a.alias = #{val}
-              RETURNING id
-            "
+                INSERT INTO booking_details (booking_id, rank, charge_id, created_at, updated_at)
+                SELECT #{booking_id}, #{i+1}, c.id, '#{created_at}', '#{created_at}'
+                FROM charge_aliases a, charges c
+                WHERE a.charge_id = c.id AND a.alias = #{val}
+                RETURNING id
+              "
             ActiveRecord::Base.connection.execute(sql)
           end
         end
+      end
+    end
+
+    def process_data_QUICK!(file_path, survey_id)
+      user_settings = current_user.settings
+
+      db_field_names  = user_settings.required_fields
+      csv_field_names = user_settings.booking_headers
+
+      charge_headers = user_settings.charge_headers
+
+      ActiveRecord::Base.establish_connection
+
+      created_at = Time.now.strftime("%Y-%m-%d %H:%M:%S")
+
+      CSV.foreach(file_path, {headers: :first_row}) do |row|
+        sql_vals = []
+
+        csv_field_names.each do |column|
+          val = row[column].strip
+          sql_vals << ActiveRecord::Base.connection.quote(val)
+        end
+
+        score = 0
+
+        charge_headers.each do |column|
+          val = row[column].strip
+          unless val.empty?
+            val = ActiveRecord::Base.connection.quote(val)
+
+            sql = "SELECT c.charge_type_id FROM charge_aliases a, charges c WHERE a.charge_id = c.id AND a.alias = #{val}"
+            #sql = "SELECT t.score FROM charge_aliases a, charges c, charge_types t WHERE a.charge_id = c.id AND c.charge_type_id = t.id AND a.alias = #{val}"
+
+            result = ActiveRecord::Base.connection.select_all(sql).first
+
+            charge_type_id = result['charge_type_id'].to_i unless result.nil?
+
+            if charge_type_id == 5
+              score = 16
+              break
+            elsif charge_type_id == 2
+              score = 8
+            end
+          end
+        end
+
+        sql = "
+            INSERT INTO bookings
+              (survey_id, #{db_field_names.join(', ')}, score, created_at, updated_at)
+            VALUES
+              (#{survey_id}, #{sql_vals.join(', ')}, #{score}, '#{created_at}', '#{created_at}')
+            RETURNING id
+          "
+
+        ActiveRecord::Base.connection.insert(sql)
       end
     end
 end

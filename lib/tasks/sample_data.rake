@@ -8,6 +8,7 @@ namespace :db do
     make_surveys
     make_bookings
     make_booking_details
+    make_filter_criteria
   end
 end
 
@@ -33,9 +34,10 @@ def make_users
 end
 
 def make_charge_types
-  [0,8,4,4,16,1,2].each do |n|
-    ChargeType.create!(score: n)
-  end
+  #[0,8,4,4,16,1,2].each do |n|
+  #  ChargeType.create!(score: n)
+  #end
+  populate_table('charge_types')
 end
 
 def make_charges
@@ -91,8 +93,17 @@ def make_booking_details
   end
 end
 
+def make_filter_criteria
+  { 1 => 1, 4 => -1 }.each do |key, value|
+    fc = FilterCriterion.new(charge_type_id: key,
+                             significance: value)
+    fc.survey_id = 0
+    fc.save!
+  end
+end
+
 def populate_table(table)
-  file_path = "files/#{table}.csv"
+  file_path = "setup/#{table}.csv"
   field_names = CSV.parse(File.open(file_path, &:readline))[0]
 
   created_at = Time.now.strftime("%Y-%m-%d %H:%M:%S")
