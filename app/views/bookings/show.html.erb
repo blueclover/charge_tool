@@ -1,13 +1,15 @@
 <% provide(:title, "Booking #{@booking.id}") %>
 <h1>Booking <%= @booking.id %></h1>
-<h2>Score: <%= @booking.score %></h2>
 <h1><%= @booking.bucket %></h1>
 
 <ol class="booking_details">
 <% @booking.booking_details.each do |detail| %>
   <li>
     Charge <%= detail.rank %>:
-    <%= detail.charge_id %>
+    <%= detail.charge_id %> |
+    <%= detail.alias %> |
+    <%= detail.category %>
+    <%#= ChargeType.find_by_id() %>
   </li>
 <% end %>
 </ol>

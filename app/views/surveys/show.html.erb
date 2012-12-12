@@ -9,8 +9,8 @@
       <p><%= pluralize(@survey.bookings.count, "booking") %></p>
       <p><%= pluralize(@survey.bookings.interesting.count, "interesting booking") %></p>
       <p><%= pluralize(@survey.bookings.interesting.with_zip.count, "interesting booking") %>
-        with zip codes</p>
-      <p><%= @survey.bookings.interesting.with_ca_zip.count %> with CA zip codes
+        with zip information</p>
+      <p><%= @survey.bookings.interesting.with_ca_zip.count %> with CA zip
       <% if @survey.assets.exists? %>
         <h4>Attached Files</h4>
         <ol class="assets">

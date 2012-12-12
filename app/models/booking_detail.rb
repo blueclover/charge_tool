@@ -9,4 +9,12 @@ class BookingDetail < ActiveRecord::Base
   validates :rank, presence: true
 
   default_scope order: 'booking_id, rank'
+
+  def category
+    charge.charge_type.description || 'N/A'
+  end
+
+  def alias
+    charge.charge_aliases.first.alias
+  end
 end

@@ -30,14 +30,10 @@ class Booking < ActiveRecord::Base
     s = score
     if s > 15
       "Disqualified"
-    elsif s > 10
-      "Co-Occurring"
     elsif s > 7
-      "Substance Abuse"
-    elsif s > 2
-      "Mental Health"
+      "Relevant"
     else
-      "N/A"
+      "Not Relevant"
     end
   end
 end
