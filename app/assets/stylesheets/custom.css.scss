@@ -44,6 +44,15 @@ textarea {
   }
 }
 
+table td, table th {
+  padding-right: 20px;
+  padding-bottom: 5px;
+  text-align: left;
+  &:last-child {
+    text-align: right;
+  }
+}
+
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {
@@ -261,9 +270,7 @@ aside {
   }
 }
 
-/* filter */
-
-#filter {
+form {
   label {
     vertical-align: 5px;
     display: inline;
@@ -277,5 +284,15 @@ aside {
 }
 
 .row {
-  padding-top: 60px;
+  margin-top: 60px;
+}
+
+.group {
+  border: 1px solid #E8E8E8;
+  margin: 0px 60px 15px 0;
+  padding: 15px;
+
+  select {
+    width: 90%;
+  }
 }

@@ -1,0 +1,36 @@
+<% provide(:title, "Frequency Table") %>
+
+<div class="row">
+  <aside class="span4">
+    <div class="group">
+      <%= form_tag frequency_table_survey_path(@survey), method: 'get' do %>
+        <%= label_tag 'Group on' %>
+        <%= select_tag(:column,
+                       options_for_select([['Zip Code',  'zip_code'],
+                                           ['City', 'city']],
+                                          selected: @column)) %><br/>
+        <%= submit_tag "View Results", class: "btn" %>
+      <% end  %>
+    </div>
+    <p><%= link_to "Download CSV",
+                   frequency_table_survey_path(@survey, column: @column,
+                                               format: "csv"),
+                   class: "btn btn-primary" %></p>
+    <p><%= link_to 'Back to Survey', @survey, class: "btn" %></p>
+  </aside>
+  <div class="span6 ">
+    <table id="frequency-table">
+      <tr>
+        <th><%= @column %></th>
+        <th>count</th>
+      </tr>
+      <% @table.each do |key, value| %>
+        <tr>
+          <td><%= key %></td>
+          <td><%= value %></td>
+        </tr>
+      <% end %>
+    </table>
+
+  </div>
+</div>

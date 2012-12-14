@@ -14,9 +14,11 @@
   </div>
   <p>
     <%= f.submit class: "btn btn-primary" %>
-    <%= link_to "Add another file", 'javascript:',
-                id: "add_another_file",
-                class: "btn"%>
+    <% if @survey.new_record? %>
+      <%= link_to "Add another file", 'javascript:',
+                  id: "add_another_file",
+                  class: "btn"%>
+      <% end %>
     <%= link_to "Cancel", :back, class: "btn" %>
   </p>
 <% end %>

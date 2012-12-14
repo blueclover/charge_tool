@@ -17,6 +17,7 @@ ChargeTool::Application.routes.draw do
 
     member do
       put :commit_scores
+      get :frequency_table
     end
   end
 

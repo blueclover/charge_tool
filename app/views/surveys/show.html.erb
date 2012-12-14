@@ -1,22 +1,38 @@
 <% provide(:title, @survey.name) %>
 <div class="row">
   <aside class="span4">
+    <p><%= link_to "Edit Survey", edit_survey_path(@survey), class: "btn btn-primary" %></p>
+    <p><%= link_to "View Frequency Table", frequency_table_survey_path(@survey), class: "btn" %></p>
+  </aside>
+  <div class="span6">
     <section>
-      <h1>
+      <h3>
         <%= @survey.name %>
-      </h1>
+      </h3>
       <p>Created <%= @survey.created_at.strftime("%m/%d/%Y") %></p>
-      <p><%= pluralize(@survey.bookings.count, "booking") %></p>
-      <p><%= pluralize(@survey.bookings.interesting.count, "interesting booking") %></p>
-      <p><%= pluralize(@survey.bookings.interesting.with_zip.count, "interesting booking") %>
-        with zip information</p>
-      <p><%= @survey.bookings.interesting.with_ca_zip.count %> with CA zip
+      <p><%= pluralize(@survey.bookings.count, "booking") %>
+        <%= link_to 'view',
+                    survey_bookings_path(@survey),
+                    class: 'btn btn-mini'%></p>
+      <p><%= pluralize(@survey.bookings.relevant.count, "relevant booking") %>
+        <%= link_to 'view',
+                    survey_bookings_path(@survey, filter: 'relevant'),
+                    class: 'btn btn-mini'%></p>
+      <p><%= pluralize(@survey.bookings.relevant.with_zip.count, "relevant booking")%>
+        with zip information
+        <%= link_to 'view',
+                  survey_bookings_path(@survey, filter: 'with_zip'),
+                  class: 'btn btn-mini'%></p>
+      <p><%= @survey.bookings.relevant.with_ca_zip.count %> with CA zip
+        <%= link_to 'view',
+                    survey_bookings_path(@survey, filter: 'with_ca_zip'),
+                    class: 'btn btn-mini'%></p>
       <% if @survey.assets.exists? %>
         <h4>Attached Files</h4>
         <ol class="assets">
           <% @survey.assets.each do |asset| %>
             <li id="<%= asset.id %>">
-              <%= button_to 'process file',
+              <%#= button_to 'process file',
                             process_csv_file_path(asset),
                             method: :put,
                             class: "btn btn-mini" %>
@@ -28,12 +44,10 @@
           <% end %>
         </ol>
       <% end %>
-      <%= button_to 'Commit Scores',
+      <%#= button_to 'Commit Scores',
                     commit_scores_survey_path(@survey),
                     method: :put,
                     class: "btn" %>
-      <p><%= link_to "Edit Survey", edit_survey_path(@survey), class: "btn" %></p>
-      <p><%= link_to "View Bookings", survey_bookings_path(@survey), class: "btn" %></p>
     </section>
-  </aside>
+  </div>
 </div>
