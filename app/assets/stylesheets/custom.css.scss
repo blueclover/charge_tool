@@ -3,8 +3,9 @@
 /* mixins, variables, etc. */
 
 $grayMediumLight: #eaeaea;
-$cochsBlue: #003056;
-//$cochsBlue: #041C2C;
+$cochsNavy: #003056;
+$cochsLightBlue: #71A4D7;
+//$cochsNavy: #041C2C;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -12,9 +13,13 @@ $cochsBlue: #003056;
   box-sizing: border-box;
 }
 
+.row {
+  margin-top: 60px;
+}
+
 /* universal */
 a {
-  color: $cochsBlue;
+  color: $cochsNavy;
   &:hover {
     color: $grayDarker;
   }
@@ -57,7 +62,7 @@ table td, table th {
 
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 15px;
-  color: $cochsBlue;
+  color: $cochsNavy;
 }
 
 h1 {
@@ -79,6 +84,10 @@ h2 {
 h3 {
   font-size: 2.2em;
   letter-spacing: -1px;
+}
+
+h4 {
+  margin-top: 30px;
 }
 
 p {
@@ -111,7 +120,7 @@ p {
     margin: 10px 20px 10px 0px;
     float: left;
   }
-  background-color: $cochsBlue;
+  background-color: $cochsNavy;
   background-image: none;
   background-repeat: no-repeat;
   filter: none;
@@ -216,10 +225,11 @@ input, textarea, select, .uneditable-input {
   }
 }
 
+/* home screen */
 .hero-unit {
   margin-top: 80px;
   h1 {
-    color: $cochsBlue;
+    color: $cochsNavy;
   }
 }
 
@@ -283,10 +293,6 @@ form {
   }
 }
 
-.row {
-  margin-top: 60px;
-}
-
 .group {
   border: 1px solid #E8E8E8;
   margin: 0px 60px 15px 0;
@@ -294,5 +300,21 @@ form {
 
   select {
     width: 90%;
+  }
+}
+
+.simple-table {
+  table {
+    td, th {
+      padding: 5px 15px;
+    }
+    th {
+      text-align: left;
+      color: $cochsNavy;
+      border-bottom: 2px solid $cochsNavy;
+    }
+    td {
+      border-bottom: 1px solid #E8E8E8;
+    }
   }
 }

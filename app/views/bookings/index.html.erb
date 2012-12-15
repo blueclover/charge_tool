@@ -1,17 +1,38 @@
 <% provide(:title, "Bookings") %>
 
 <div class="row">
-  <%= will_paginate %>
   <aside class="span4">
-    <p><%= link_to 'Back to Survey', @survey, class: "btn btn-primary" %></p>
-    <p><%= link_to 'New Booking', new_survey_booking_path(@survey),
+    <div class="group">
+      <%= form_tag survey_bookings_path(@survey), method: 'get' do %>
+        <%= label_tag 'Sort by' %>
+        <%= select_tag(:column,
+                       options_for_select([['Booking ID',  'id'],
+                                           ['City', 'city'],
+                                           ['Relevance', 'score'],
+                                           ['Zip Code', 'zip_code']],
+                                          selected: @column)) %><br/>
+        <%= hidden_field_tag(:filter, @filter) %>
+        <%= submit_tag "Sort", class: "btn" %>
+      <% end  %>
+    </div>
+    <p><%= link_to 'Back to Survey', @survey, class: "btn" %></p>
+    <p><%#= link_to 'New Booking', new_survey_booking_path(@survey),
           class: "btn" %></p>
   </aside>
-  <div class="span6">
-    <h3>Bookings</h3>
-    <ul class="users">
-      <%= render @bookings %>
-    </ul>
+  <div class="span8">
+    <div class="simple-table">
+      <table id="bookings">
+        <tr>
+          <th>ID</th>
+          <th>City</th>
+          <th>Zip Code</th>
+          <th># Charges</th>
+          <th>Relevance</th>
+          <th></th>
+        </tr>
+        <%= render @bookings %>
+      </table>
+    </div>
+    <%= will_paginate %>
   </div>
-  <%= will_paginate %>
 </div>

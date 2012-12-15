@@ -1,7 +1,7 @@
 <% provide(:title, @survey.name) %>
 <div class="row">
   <aside class="span4">
-    <p><%= link_to "Edit Survey", edit_survey_path(@survey), class: "btn btn-primary" %></p>
+    <p><%= link_to "Edit Survey", edit_survey_path(@survey), class: "btn" %></p>
     <p><%= link_to "View Frequency Table", frequency_table_survey_path(@survey), class: "btn" %></p>
   </aside>
   <div class="span6">
