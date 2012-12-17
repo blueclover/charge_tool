@@ -1,5 +1,5 @@
 class Booking < ActiveRecord::Base
-  attr_accessible :booking_date, :zip_code, :booking_details_attributes
+  attr_accessible :booking_date, :zip_code, :city, :booking_details_attributes
   belongs_to :survey
   has_many :booking_details, dependent: :delete_all
   has_many :charges, through: :booking_details

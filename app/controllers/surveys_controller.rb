@@ -60,7 +60,8 @@ class SurveysController < ApplicationController
   end
 
   def frequency_table
-    @column = params[:column] || "zip_code"
+    @column = params[:column]
+    @column = 'zip_code' unless ['city', 'zip_code'].include?(@column)
     @table = @survey.frequency_table(@column)
     respond_to do |format|
       format.html

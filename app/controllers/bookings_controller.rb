@@ -4,16 +4,21 @@ class BookingsController < ApplicationController
   before_filter :find_booking, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @filter = params[:filter]
-    @column = params[:column] || "score"
+    scopes = %w{no_zip with_zip with_ca_zip}
+    columns = %w{id city score zip_code}
+
+    @filter = params[:filter] || ''
+    @sort = params[:sort]
+    @sort = 'score' unless columns.include?(@sort)
+
     if @filter == 'relevant'
       @bookings = @survey.bookings.relevant
-    elsif @filter.to_s.strip.length > 0
+    elsif scopes.include?(@filter)
       @bookings = @survey.bookings.relevant.send(@filter)
     else
       @bookings = @survey.bookings
     end
-    @bookings = @bookings.order(@column).paginate(page: params[:page], per_page: 100)
+    @bookings = @bookings.order(@sort).paginate(page: params[:page], per_page: 100)
   end
 
   def show

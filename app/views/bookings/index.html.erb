@@ -4,13 +4,27 @@
   <aside class="span4">
     <div class="group">
       <%= form_tag survey_bookings_path(@survey), method: 'get' do %>
+        <%= label_tag 'Filter' %>
+        <%= select_tag(:filter,
+                       options_for_select([['None',  ''],
+                                           ['Relevant', 'relevant'],
+                                           ['No Zip', 'no_zip'],
+                                           ['Any Zip', 'with_zip'],
+                                           ['CA Zip', 'with_ca_zip']],
+                                          selected: @filter)) %><br/>
+        <%= hidden_field_tag(:sort, @sort) %>
+        <%= submit_tag "Apply Filter", class: "btn" %>
+      <% end  %>
+    </div>
+    <div class="group">
+      <%= form_tag survey_bookings_path(@survey), method: 'get' do %>
         <%= label_tag 'Sort by' %>
-        <%= select_tag(:column,
+        <%= select_tag(:sort,
                        options_for_select([['Booking ID',  'id'],
                                            ['City', 'city'],
                                            ['Relevance', 'score'],
                                            ['Zip Code', 'zip_code']],
-                                          selected: @column)) %><br/>
+                                          selected: @sort)) %><br/>
         <%= hidden_field_tag(:filter, @filter) %>
         <%= submit_tag "Sort", class: "btn" %>
       <% end  %>
