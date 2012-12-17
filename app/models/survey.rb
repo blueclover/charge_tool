@@ -86,7 +86,7 @@ class Survey < ActiveRecord::Base
   end
 
   def charge_type_table
-    bookings.charges.charge_types.where('description IS NOT NULL')
+    bookings.joins(:charge_types).where('description IS NOT NULL').count(group: 'description' , order: 'description')
   end
 
   def frequency_table(column)

@@ -10,23 +10,19 @@
         <%= @survey.name %>
       </h3>
       <p>Created <%= @survey.created_at.strftime("%m/%d/%Y") %></p>
-      <p><%= pluralize(@survey.bookings.count, "booking") %>
+      <h4>Bookings</h4>
+      <p>Total: <%= @survey.bookings.count %>
         <%= link_to 'view',
                     survey_bookings_path(@survey),
                     class: 'btn btn-mini'%></p>
-      <p><%= pluralize(@survey.bookings.relevant.count, "relevant booking") %>
+      <p>Relevant: <%= @survey.bookings.relevant.count %>
         <%= link_to 'view',
                     survey_bookings_path(@survey, filter: 'relevant'),
                     class: 'btn btn-mini'%></p>
-      <p><%= pluralize(@survey.bookings.relevant.with_zip.count, "relevant booking")%>
-        with zip information
-        <%= link_to 'view',
-                  survey_bookings_path(@survey, filter: 'with_zip'),
-                  class: 'btn btn-mini'%></p>
-      <p><%= @survey.bookings.relevant.with_ca_zip.count %> with CA zip
-        <%= link_to 'view',
-                    survey_bookings_path(@survey, filter: 'with_ca_zip'),
-                    class: 'btn btn-mini'%></p>
+      <h4>Charges</h4>
+      <% @charge_table.each do |key, value| %>
+        <p><%= "#{key}: #{value}" %></p>
+      <% end %>
       <% if @survey.assets.exists? %>
         <h4>Attached Files</h4>
         <ol class="assets">

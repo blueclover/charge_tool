@@ -1,18 +1,32 @@
 <% provide(:title, "Booking #{@booking.id}") %>
-<h1>Booking <%= @booking.id %></h1>
-<h1><%= @booking.bucket %></h1>
-
-<ol class="booking_details">
-<% @booking.booking_details.each do |detail| %>
-  <li>
-    Charge <%= detail.rank %>:
-    <%= detail.charge_id %> |
-    <%= detail.alias %> |
-    <%= detail.category %>
-    <%#= ChargeType.find_by_id() %>
-  </li>
-<% end %>
-</ol>
-
-<%= link_to 'Edit', [:edit, @survey, @booking] %> |
-<%= link_to 'Back to Bookings', survey_bookings_path(@survey) %>
+<div class="row">
+  <aside class="span3">
+    <%= link_to 'Back to Bookings', survey_bookings_path(@survey),
+                class: 'btn' %>
+  </aside>
+  <div class="span8">
+    <h3>Booking <%= @booking.id %>: <%= @booking.bucket %></h3>
+    <h2></h2>
+    <div class="simple-table">
+      <table id="booking-details">
+        <tr>
+          <th>Charge #</th>
+          <th>Charge ID</th>
+          <th>Charge Alias</th>
+          <th>Charge Type</th>
+          <th></th>
+        </tr>
+        <% @booking.booking_details.each do |detail| %>
+          <tr>
+            <td><%= detail.rank %></td>
+            <td><%= detail.charge_id %></td>
+            <td><%= detail.alias %></td>
+            <td><%= detail.category %></td>
+            <td></td>
+            <%#= ChargeType.find_by_id() %>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

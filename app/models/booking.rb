@@ -3,6 +3,7 @@ class Booking < ActiveRecord::Base
   belongs_to :survey
   has_many :booking_details, dependent: :delete_all
   has_many :charges, through: :booking_details
+  has_many :charge_types, through: :charges
 
   #before_save :commit_score!
 

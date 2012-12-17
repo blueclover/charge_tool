@@ -7,10 +7,7 @@ class SurveysController < ApplicationController
     @surveys = Survey.for(current_user).paginate(page: params[:page])
   end
   def show
-    respond_to do |format|
-      format.html
-      format.csv { send_data @survey.frequency_table("city") }
-    end
+    @charge_table = @survey.charge_type_table
   end
 
   def new

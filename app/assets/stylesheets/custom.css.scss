@@ -13,10 +13,6 @@ $cochsLightBlue: #71A4D7;
   box-sizing: border-box;
 }
 
-.row {
-  margin-top: 60px;
-}
-
 /* universal */
 a {
   color: $cochsNavy;
@@ -30,7 +26,6 @@ html {
 }
 
 body {
-  padding-top: 60px;
   font-family: Arial;
 }
 
@@ -225,14 +220,6 @@ input, textarea, select, .uneditable-input {
   }
 }
 
-/* home screen */
-.hero-unit {
-  margin-top: 80px;
-  h1 {
-    color: $cochsNavy;
-  }
-}
-
 /* surveys */
 
 .surveys {
@@ -316,5 +303,32 @@ form {
     td {
       border-bottom: 1px solid #E8E8E8;
     }
+  }
+}
+
+/* over-ride bootstap */
+.btn-primary {
+  background-color: #003056;
+  background-image: -webkit-linear-gradient(top, #004F8D, #003056);
+  background-image: -moz-linear-gradient(top, #004F8D, #003056);
+  background-image: -ms-linear-gradient(top, #004F8D, #003056);
+  background-image: -webkit-gradient(top, #004F8D, #003056);
+  background-image: -o-linear-gradient(top, #004F8D, #003056);
+  background-image: linear-gradient(top, #004F8D, #003056);
+  border-color: #003056 #003056 #00203A;
+}
+.btn-primary:hover {
+  background-color: #003056;
+}
+
+.navbar-fixed-top {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+/* home screen */
+.hero-unit {
+  h1 {
+    color: $cochsNavy;
   }
 }
