@@ -1,6 +1,7 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
+    delete_old_files
     make_users
     make_charge_types
     make_charges
@@ -122,4 +123,8 @@ def populate_table(table)
         "(#{sql_vals.join(', ')}, '#{created_at}', '#{created_at}')"
     ActiveRecord::Base.connection.insert(sql)
   end
+end
+
+def delete_old_files
+  FileUtils.rm_rf(Dir.glob('files/*'))
 end
