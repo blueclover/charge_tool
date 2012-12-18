@@ -7,7 +7,7 @@ class BookingsController < ApplicationController
     scopes = %w{no_zip with_zip with_ca_zip}
     columns = %w{id city score zip_code}
 
-    @filter = params[:filter] || ''
+    @filter = params[:filter] || nil
     @sort = params[:sort]
     @sort = 'score' unless columns.include?(@sort)
 

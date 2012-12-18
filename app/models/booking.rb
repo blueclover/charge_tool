@@ -12,7 +12,7 @@ class Booking < ActiveRecord::Base
   validates :survey_id, presence: true
 
   scope :relevant, where("score < 16 AND score > 2")
-  scope :no_zip, where("zip_code = '00000' OR zip_code = '99999' OR zip_code IS NULL")
+  scope :no_zip, where("zip_code <= '00000' OR zip_code >= '99999' OR zip_code IS NULL")
   scope :with_zip, where("zip_code > '00000' AND zip_code < '99999'")
   scope :with_ca_zip, where("zip_code BETWEEN '90001' AND '96162'")
   scope :zip, lambda { |zip| where("zip_code = ?", zip) }
