@@ -22,14 +22,26 @@ class SurveysController < ApplicationController
   def create
     @survey = current_user.surveys.build(params[:survey])
     if @survey.save
+      proper_headers = true
       @survey.assets.each do |asset|
-        if asset.proper_headers?(current_user.settings)
-          asset.process_data!(current_user.settings)
+        unless asset.proper_headers?(current_user.settings)
+          proper_headers = false
+          flash[:error] = "#{asset.asset_file_name} does not have proper headers. Please modify header name settings below or change headers in the file."
+          break
         end
       end
-      @survey.commit_scores!
-      flash[:success] = "Survey created"
-      redirect_to @survey
+
+      if proper_headers
+        @survey.assets.each do |asset|
+            asset.process_data!(current_user.settings)
+        end
+        @survey.commit_scores!
+        flash[:success] = "Survey created"
+        redirect_to @survey
+      else
+        @survey.destroy
+        redirect_to settings_path
+      end
     else
       render :new
     end

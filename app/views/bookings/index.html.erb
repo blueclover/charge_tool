@@ -8,9 +8,9 @@
         <%= select_tag(:filter,
                        options_for_select([['None',  nil],
                                            ['Relevant', 'relevant'],
-                                           ['No Zip', 'no_zip'],
-                                           ['Any Zip', 'with_zip'],
-                                           ['CA Zip', 'with_ca_zip']],
+                                           [' - No Zip', 'no_zip'],
+                                           [' - Any Zip', 'with_zip'],
+                                           [' - CA Zip', 'with_ca_zip']],
                                           selected: @filter)) %><br/>
         <%= hidden_field_tag(:sort, @sort) %>
         <%= submit_tag "Apply Filter", name: nil, class: "btn" %>

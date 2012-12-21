@@ -3,17 +3,17 @@ class BookingsController < ApplicationController
   before_filter :find_survey
   before_filter :find_booking, :only => [:show, :edit, :update, :destroy]
 
-  def index
-    scopes = %w{no_zip with_zip with_ca_zip}
-    columns = %w{id city score zip_code}
+  SCOPES = %w{no_zip with_zip with_ca_zip}
+  COLUMNS = %w{id city score zip_code}
 
+  def index
     @filter = params[:filter] || nil
     @sort = params[:sort]
-    @sort = 'score' unless columns.include?(@sort)
+    @sort = 'score' unless COLUMNS.include?(@sort)
 
     if @filter == 'relevant'
       @bookings = @survey.bookings.relevant
-    elsif scopes.include?(@filter)
+    elsif SCOPES.include?(@filter)
       @bookings = @survey.bookings.relevant.send(@filter)
     else
       @bookings = @survey.bookings

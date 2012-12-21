@@ -11,11 +11,11 @@ class Booking < ActiveRecord::Base
 
   validates :survey_id, presence: true
 
-  scope :relevant, where("score < 16 AND score > 2")
-  scope :no_zip, where("zip_code <= '00000' OR zip_code >= '99999' OR zip_code IS NULL")
-  scope :with_zip, where("zip_code > '00000' AND zip_code < '99999'")
-  scope :with_ca_zip, where("zip_code BETWEEN '90001' AND '96162'")
-  scope :zip, lambda { |zip| where("zip_code = ?", zip) }
+  scope :relevant,    -> { where("score < ? AND score > ?", 16, 2) }
+  scope :no_zip,      -> { where("zip_code <= ? OR zip_code >= ? OR zip_code IS NULL", '00000', '99999') }
+  scope :with_zip,    -> { where("zip_code > ? AND zip_code < ?", '00000', '99999') }
+  scope :with_ca_zip, -> { where("zip_code BETWEEN ? AND ?", '90001', '96162') }
+  scope :zip,         ->(zip) { where("zip_code = ?", "#{zip}") }
 
   def commit_score!
     total_score = 0

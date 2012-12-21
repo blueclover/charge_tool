@@ -16,18 +16,22 @@ class Asset < ActiveRecord::Base
       required_fields[field] = 0
     end
 
-    # open file and read just first line
-    fields = CSV.parse(File.open(asset.path, &:readline))[0]
+    begin
+      # open file and read just first line
+      fields = CSV.parse(File.open(asset.path, &:readline))[0]
 
-    fields.each do |field|
-      required_fields[field] += 1 if required_fields.has_key?(field)
+      fields.each do |field|
+        required_fields[field] += 1 if required_fields.has_key?(field)
+      end
+
+      required_fields.each_value do |count|
+        return false if count != 1
+      end
+
+      true
+    rescue
+      false
     end
-
-    required_fields.each_value do |count|
-      return false if count != 1
-    end
-
-    true
   end
 
   def process_data!(user_settings)
