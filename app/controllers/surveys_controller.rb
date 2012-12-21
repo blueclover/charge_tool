@@ -26,7 +26,7 @@ class SurveysController < ApplicationController
       @survey.assets.each do |asset|
         unless asset.proper_headers?(current_user.settings)
           proper_headers = false
-          flash[:error] = "#{asset.asset_file_name} does not have proper headers. Please modify header name settings below or change headers in the file."
+          flash[:error] = "#{asset.asset_file_name} does not have proper headers. Please modify settings below or change column headers in the file."
           break
         end
       end
