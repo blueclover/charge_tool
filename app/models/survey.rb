@@ -89,12 +89,12 @@ class Survey < ActiveRecord::Base
     bookings.joins(:charge_types).where('description IS NOT NULL').count(group: 'description' , order: 'description')
   end
 
-  def frequency_table(column)
-    table = bookings.relevant.count(group: column, order: "count(*) DESC")
+  def frequency_table(column, sort="#{column}")
+    table = bookings.relevant.count(group: column, order: sort)
   end
 
-  def to_csv(column)
-    table = frequency_table(column)
+  def to_csv(column, sort="#{column}")
+    table = frequency_table(column, sort)
     CSV.generate do |csv|
       csv << [column, "count"]
       table.each do |key, value|

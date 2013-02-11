@@ -73,11 +73,28 @@ class SurveysController < ApplicationController
 
   def frequency_table
     @column = params[:column]
+    @sort = params[:sort]
+    @order = params[:order]
+
     @column = 'zip_code' unless ['city', 'zip_code'].include?(@column)
-    @table = @survey.frequency_table(@column)
+
+    sort = @column
+
+    if @sort == 'freq'
+      sort = 'count(*)'
+    end
+
+    sort += " #{@order}"
+
+    # if @order == 'desc'
+    #   sort += ' DESC'
+    # end
+
+    @table = @survey.frequency_table(@column, sort)
+
     respond_to do |format|
       format.html
-      format.csv { send_data @survey.to_csv(@column) }
+      format.csv { send_data @survey.to_csv(@column, sort) }
     end
   end
 

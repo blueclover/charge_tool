@@ -9,11 +9,21 @@
                        options_for_select([['Zip Code',  'zip_code'],
                                            ['City', 'city']],
                                           selected: @column)) %><br/>
+        <%= label_tag 'Sort by' %>
+        <%= select_tag(:sort,
+                       options_for_select([['City/Zip',  'loc'],
+                                           ['Frequency', 'freq']],
+                                          selected: @sort)) %><br/>
+        <%= select_tag(:order,
+                       options_for_select([['Ascending',  'asc'],
+                                           ['Descending', 'desc']],
+                                          selected: @order)) %><br/>
         <%= submit_tag "View Results", name: nil, class: "btn" %>
       <% end  %>
     </div>
     <p><%= link_to "Download CSV",
                    frequency_table_survey_path(@survey, column: @column,
+                                               sort: @sort, order: @order,
                                                format: "csv"),
                    class: "btn" %></p>
     <p><%= link_to 'Back to Survey', @survey, class: "btn" %></p>
