@@ -90,7 +90,7 @@ class Survey < ActiveRecord::Base
   end
 
   def frequency_table(column)
-    table = bookings.count(group: column, order: "count(*) DESC")
+    table = bookings.relevant.count(group: column, order: "count(*) DESC")
   end
 
   def to_csv(column)
