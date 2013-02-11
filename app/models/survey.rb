@@ -34,6 +34,20 @@ class Survey < ActiveRecord::Base
     user.admin? ? Survey : Survey.viewable_by(user)
   end
 
+  def filter_description
+    text = 'Results include all bookings with the following charge types: ['
+    included = self.filter_criteria.where('significance = 1')
+    text += included.map(&:description).join(', ')
+    text += ']'
+    excluded = self.filter_criteria.where('significance = -1')
+    if excluded.count > 0
+      text += ', except those that also contain bookings with the following charge types: ['
+      text += excluded.map(&:description).join(', ')
+      text += ']'
+    end
+    text
+  end
+
   def commit_scores!
     set_filter_criteria!
     clear_scores!

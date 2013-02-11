@@ -29,6 +29,7 @@
     <p><%= link_to 'Back to Survey', @survey, class: "btn" %></p>
   </aside>
   <div class="span6 ">
+
     <table id="frequency-table">
       <tr>
         <th><%= @column %></th>
@@ -41,6 +42,6 @@
         </tr>
       <% end %>
     </table>
-
+    <%= @survey.filter_description %>
   </div>
 </div>
