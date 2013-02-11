@@ -41,7 +41,7 @@ class Survey < ActiveRecord::Base
     text += ']'
     excluded = self.filter_criteria.where('significance = -1')
     if excluded.count > 0
-      text += ', except those that also contain bookings with the following charge types: ['
+      text += ', except those that also have the following charge types: ['
       text += excluded.map(&:description).join(', ')
       text += ']'
     end
