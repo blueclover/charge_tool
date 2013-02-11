@@ -13,8 +13,7 @@ class SurveysController < ApplicationController
   def new
     @survey = current_user.surveys.build
     @survey.assets.build
-    #@survey.filter_criteria.build
-    ChargeType.where('description IS NOT NULL').each do |type|
+    ChargeType.where('description IS NOT NULL').order(:id).each do |type|
       @survey.filter_criteria.build(charge_type_id: type.id)
     end
   end
@@ -48,6 +47,7 @@ class SurveysController < ApplicationController
   end
 
   def edit
+    @filter_criteria = @survey.filter_criteria.order(:charge_type_id)
   end
 
   def update

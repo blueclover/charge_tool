@@ -4,7 +4,7 @@
   <%= f.text_field :name %>
   <% number = 0 %>
   <div id='filter'>
-    <%= f.fields_for :filter_criteria do |builder| %>
+    <%= f.fields_for :filter_criteria, @filter_criteria do |builder| %>
       <%= render 'filter_fields', f: builder %>
     <% end %>
   </div>
